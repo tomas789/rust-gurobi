@@ -34,6 +34,14 @@ impl Env {
     })
   }
 
+  pub fn start(&mut self) -> Result<()> {
+    let error = unsafe { ffi::GRBstartenv(self.env) };
+    if error != 0 {
+      return Err(Error::FromAPI(get_error_msg(self.env), error));
+    }
+    Ok(())
+  }
+
   /// Create an environment with ISV keys
   pub fn isv(isv_name: &str, isv_appname: &str, isv_expiration: i32, isv_key: &str) -> Result<Env> {
     let mut env = null_mut();
