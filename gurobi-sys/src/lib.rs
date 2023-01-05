@@ -100,7 +100,8 @@ pub enum IntParam {
   NoRelHeuristic,
   UpdateMode,
   WorkerPort,
-  Record
+  Record,
+  GURO_PAR_ISVEXPIRATION
 }
 
 #[derive(Debug,Copy,Clone)]
@@ -138,7 +139,10 @@ pub enum StringParam {
   ResultFile,
   WorkerPool,
   WorkerPassword,
-  Dummy
+  Dummy,
+  GURO_PAR_ISVNAME,
+  GURO_PAR_ISVAPPNAME,
+  GURO_PAR_ISVKEY,
 }
 
 #[derive(Debug,Copy,Clone)]

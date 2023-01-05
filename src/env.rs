@@ -34,6 +34,48 @@ impl Env {
     })
   }
 
+  /// Create an environment with ISV keys
+  pub fn isv(isv_name: &str, isv_appname: &str, isv_expiration: i32, isv_key: &str) -> Result<Env> {
+    let mut env = null_mut();
+    let error = unsafe { ffi::GRBemptyenv(&mut env) };
+    if error != 0 {
+      return Err(Error::FromAPI(get_error_msg(env), error));
+    }
+
+    let isv_name = try!(CString::new(isv_name));
+    let isv_name_param = try!(CString::new("GURO_PAR_ISVNAME"));
+    let error = unsafe { ffi::GRBsetstrparam(env, isv_name_param.as_ptr(), isv_name.as_ptr()) };
+    if error != 0 {
+      return Err(Error::FromAPI(get_error_msg(env), error));
+    }
+
+    let isv_appname = try!(CString::new(isv_appname));
+    let isv_appname_param = try!(CString::new("GURO_PAR_ISVAPPNAME"));
+    let error = unsafe { ffi::GRBsetstrparam(env, isv_appname_param.as_ptr(), isv_appname.as_ptr()) };
+    if error != 0 {
+      return Err(Error::FromAPI(get_error_msg(env), error));
+    }
+
+    let isv_expiration_param = try!(CString::new("GURO_PAR_ISVEXPIRATION"));
+    let error = unsafe { ffi::GRBsetintparam(env, isv_expiration_param.as_ptr(), isv_expiration) };
+    if error != 0 {
+      return Err(Error::FromAPI(get_error_msg(env), error));
+    }
+
+    let isv_key = try!(CString::new(isv_key));
+    let isv_key_param = try!(CString::new("GURO_PAR_ISVKEY"));
+    let error = unsafe { ffi::GRBsetstrparam(env, isv_key_param.as_ptr(), isv_key.as_ptr()) };
+    if error != 0 {
+      return Err(Error::FromAPI(get_error_msg(env), error));
+    }
+
+
+    Ok(Env {
+      env: env,
+      require_drop: true
+    })
+  }
+
   /// Create empty environment
   pub fn empty() -> Result<Env> {
     let mut env = null_mut();
